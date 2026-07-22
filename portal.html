@@ -3,392 +3,387 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AcademyReports</title>
+<title>AcademyReports — Portal</title>
 <style>
-  :root{
-    --navy:#0f2544; --blue:#1e5fa8; --gold:#d4a017; --bg:#f4f6f9;
-    --card:#ffffff; --text:#1a1a2e; --muted:#6b7280; --green:#1a8a4a; --red:#c0392b;
-  }
+  :root{ --navy:#0f2544; --blue:#1e5fa8; --gold:#b9863e; --bg:#f4f6f9;
+    --card:#fff; --text:#1a1a2e; --muted:#6b7280; --green:#1a8a4a; --red:#c0392b; }
   *{box-sizing:border-box;}
-  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);}
-  header{background:var(--navy);color:#fff;padding:18px 20px;text-align:center;}
-  header h1{margin:0;font-size:1.4rem;letter-spacing:.5px;}
-  header p{margin:4px 0 0;font-size:.8rem;color:#c8d4e6;}
-  .wrap{max-width:640px;margin:0 auto;padding:20px 16px 60px;}
-  .card{background:var(--card);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
-  .role-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
-  .role-btn{padding:16px 8px;border-radius:12px;border:2px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center;font-size:.9rem;font-weight:600;color:var(--navy);}
-  .role-btn:active{background:#eef3fa;}
-  label{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 4px;font-weight:600;}
-  input,select{width:100%;padding:11px;border:1px solid #d1d9e6;border-radius:8px;font-size:1rem;background:#fff;}
-  button.primary{width:100%;padding:13px;margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:9px;font-size:1rem;font-weight:600;cursor:pointer;}
-  button.primary:active{background:var(--navy);}
-  button.ghost{width:100%;padding:11px;margin-top:8px;background:none;border:1px solid #d1d9e6;border-radius:9px;color:var(--muted);cursor:pointer;}
-  .err{color:var(--red);font-size:.85rem;margin-top:8px;}
-  .msg{color:var(--green);font-size:.85rem;margin-top:8px;}
-  table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:10px;}
-  th,td{border:1px solid #e2e8f0;padding:6px 5px;text-align:center;}
-  th{background:var(--navy);color:#fff;font-size:.72rem;}
-  .locked{color:var(--muted);font-style:italic;font-size:.85rem;padding:10px;text-align:center;background:#f4f6f9;border-radius:8px;}
-  .hidden{display:none;}
-  .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-  .school-name{font-weight:700;color:var(--navy);}
-  .subtitle{font-size:.8rem;color:var(--muted);}
-  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:.85rem;}
-  .switch{position:relative;width:44px;height:24px;background:#ccc;border-radius:20px;cursor:pointer;flex-shrink:0;}
-  .switch.on{background:var(--green);}
-  .switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.15s;}
-  .switch.on::after{left:22px;}
-  .audit-item{font-size:.78rem;border-bottom:1px solid #f0f0f0;padding:8px 0;}
-  .tabs{display:flex;gap:8px;margin-bottom:14px;}
-  .tab{flex:1;padding:10px;text-align:center;border-radius:8px;background:#eef3fa;color:var(--navy);font-size:.85rem;font-weight:600;cursor:pointer;}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
+  header{background:var(--navy);color:#fff;padding:14px 18px;text-align:center;}
+  header h1{margin:0;font-size:1.2rem;}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px;}
+  .card{background:var(--card);border-radius:10px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .role-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;max-width:520px;margin:40px auto;}
+  .role-btn{padding:20px 8px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center;font-weight:700;color:var(--navy);}
+  label{display:block;font-size:.78rem;color:var(--muted);margin:8px 0 3px;font-weight:600;}
+  input,select{width:100%;padding:8px;border:1px solid #d1d9e6;border-radius:6px;font-size:.9rem;}
+  button.primary{padding:9px 16px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;}
+  button.ghost{padding:8px 14px;background:none;border:1px solid #d1d9e6;border-radius:6px;color:var(--muted);cursor:pointer;}
+  button.small{padding:4px 8px;font-size:.75rem;}
+  .hidden{display:none !important;}
+  .err{color:var(--red);font-size:.82rem;margin-top:6px;}
+  .msg{color:var(--green);font-size:.82rem;margin-top:6px;}
+  .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+  .tabbar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .tab{padding:6px 12px;border-radius:6px;background:#eef3fa;color:var(--navy);font-size:.82rem;font-weight:600;cursor:pointer;border:1px solid #dde6f1;}
   .tab.active{background:var(--navy);color:#fff;}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;}
+  th,td{border:1px solid #e2e8f0;padding:4px;text-align:left;}
+  th{background:#f0f4f8;font-size:.72rem;}
+  td input, td select{padding:4px;font-size:.8rem;}
+  .switch{width:38px;height:20px;background:#ccc;border-radius:20px;cursor:pointer;position:relative;display:inline-block;}
+  .switch.on{background:var(--green);}
+  .switch::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.15s;}
+  .switch.on::after{left:20px;}
+  .subject-cols{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:50;}
+  .modal{background:#fff;border-radius:10px;padding:20px;max-width:900px;width:95%;max-height:88vh;overflow:auto;}
+  .subject-row{border-bottom:1px solid #eee;padding:8px 0;}
+  .readonly-mark{background:#f4f6f9;text-align:center;padding:6px;border-radius:4px;font-size:.78rem;}
+  .small-note{font-size:.72rem;color:var(--muted);}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>AcademyReports</h1>
-  <p id="headerSub">Student • Teacher • Admin Portal</p>
-</header>
-
+<header><h1>AcademyReports</h1></header>
 <div class="wrap">
 
-  <!-- ═══ ROLE SELECT ═══ -->
-  <div id="roleScreen" class="card">
-    <p style="text-align:center;color:var(--muted);margin-top:0;">Select your role to continue</p>
-    <div class="role-grid">
-      <div class="role-btn" onclick="showLogin('student')">🎓<br>Student</div>
-      <div class="role-btn" onclick="showLogin('teacher')">📘<br>Teacher</div>
-      <div class="role-btn" onclick="showLogin('admin')">🛠️<br>Admin</div>
+<!-- ═══ ROLE SELECT ═══ -->
+<div id="roleScreen">
+  <div class="role-grid">
+    <div class="role-btn" onclick="show('studentLogin')">🎓<br>Student</div>
+    <div class="role-btn" onclick="show('profLogin')">📘<br>Profs</div>
+    <div class="role-btn" onclick="show('adminLogin')">🛠️<br>Main Admin</div>
+  </div>
+</div>
+
+<!-- ═══ STUDENT LOGIN ═══ -->
+<div id="studentLogin" class="card hidden">
+  <h3>Student — check your results</h3>
+  <label>School Code</label><input id="s_school">
+  <label>Your Surname</label><input id="s_surname">
+  <label>Your Code</label><input id="s_code">
+  <button class="primary" onclick="studentLogin()">View Results</button>
+  <div id="s_err" class="err"></div>
+  <button class="ghost" onclick="show('roleScreen')">Back</button>
+</div>
+<div id="studentResult" class="card hidden">
+  <div class="top-row"><b id="s_name"></b><button class="ghost" onclick="location.reload()">Logout</button></div>
+  <div id="s_meta" class="small-note"></div>
+  <div id="s_body"></div>
+</div>
+
+<!-- ═══ PROF LOGIN ═══ -->
+<div id="profLogin" class="card hidden">
+  <h3>Profs — enter marks</h3>
+  <label>School Code</label><input id="p_school">
+  <label>Your Name</label><input id="p_name">
+  <label>Your PIN</label><input id="p_pin" type="password">
+  <button class="primary" onclick="profLogin()">Log In</button>
+  <div id="p_err" class="err"></div>
+  <button class="ghost" onclick="show('roleScreen')">Back</button>
+</div>
+<div id="profConsole" class="card hidden">
+  <div class="top-row">
+    <div>
+      <b id="p_title"></b>
+      <div class="small-note" id="p_sub"></div>
     </div>
+    <div><button class="primary" onclick="profSaveMarks()">Save Marks</button> <button class="ghost" onclick="location.reload()">Logout</button></div>
   </div>
-
-  <!-- ═══ STUDENT LOGIN ═══ -->
-  <div id="studentLogin" class="card hidden">
-    <label>School Code</label>
-    <input id="s_schoolCode" placeholder="e.g. STMARYS">
-    <label>Your Access Code</label>
-    <input id="s_code" placeholder="e.g. AR-XXXXXXX">
-    <label>Surname</label>
-    <input id="s_surname" placeholder="Your surname">
-    <button class="primary" onclick="studentLogin()">View My Marks</button>
-    <div id="s_err" class="err"></div>
-    <button class="ghost" onclick="backToRoles()">Back</button>
+  <div id="p_msg" class="msg"></div>
+  <div style="overflow-x:auto;">
+    <table id="p_table"></table>
   </div>
+</div>
 
-  <!-- ═══ STUDENT MARKS VIEW ═══ -->
-  <div id="studentMarks" class="card hidden">
+<!-- ═══ ADMIN LOGIN ═══ -->
+<div id="adminLogin" class="card hidden">
+  <h3>Main Admin</h3>
+  <label>School Code</label><input id="a_school">
+  <label>Admin Key</label><input id="a_key" type="password">
+  <button class="primary" onclick="adminLogin()">Log In</button>
+  <div id="a_err" class="err"></div>
+  <button class="ghost" onclick="show('roleScreen')">Back</button>
+</div>
+
+<!-- ═══ ADMIN CONSOLE ═══ -->
+<div id="adminConsole" class="hidden">
+  <div class="card">
     <div class="top-row">
-      <div>
-        <div class="school-name" id="stu_name"></div>
-        <div class="subtitle" id="stu_class"></div>
-      </div>
-      <button class="ghost" style="width:auto;padding:8px 12px;" onclick="location.reload()">Logout</button>
+      <b>Main Admin — <span id="a_schoolLabel"></span></b>
+      <div><button class="primary" onclick="adminSave()">Save All Changes</button> <button class="ghost" onclick="location.reload()">Logout</button></div>
     </div>
-    <div id="marksContainer"></div>
-  </div>
-
-  <!-- ═══ TEACHER LOGIN ═══ -->
-  <div id="teacherLogin" class="card hidden">
-    <label>School Code</label>
-    <input id="t_schoolCode" placeholder="e.g. STMARYS">
-    <label>Your Access Code</label>
-    <input id="t_code" placeholder="Sent to your email">
-    <label>Surname</label>
-    <input id="t_surname" placeholder="Your surname">
-    <button class="primary" onclick="teacherLogin()">Log In</button>
-    <div id="t_err" class="err"></div>
-    <button class="ghost" onclick="backToRoles()">Back</button>
-  </div>
-
-  <!-- ═══ TEACHER ENTRY VIEW ═══ -->
-  <div id="teacherEntry" class="card hidden">
-    <div class="top-row">
-      <div class="school-name" id="tea_name"></div>
-      <button class="ghost" style="width:auto;padding:8px 12px;" onclick="location.reload()">Logout</button>
-    </div>
-    <p class="subtitle">Select subject/class to enter marks</p>
-    <select id="tea_scopeSelect" onchange="loadTeacherStudents()"></select>
-    <label>Student Code</label>
-    <input id="tea_studentCode" placeholder="Student's access code">
-    <label>Term</label>
-    <select id="tea_term"><option>Term1</option><option>Term2</option><option>Term3</option></select>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
-      <div><label>CA1</label><input id="tea_ca1" type="number"></div>
-      <div><label>CA2</label><input id="tea_ca2" type="number"></div>
-      <div><label>CA3</label><input id="tea_ca3" type="number"></div>
-      <div><label>Midterm</label><input id="tea_mid" type="number"></div>
-      <div style="grid-column:1/3;"><label>Final Exam</label><input id="tea_final" type="number"></div>
-    </div>
-    <button class="primary" onclick="saveMark()">Save Mark</button>
-    <div id="tea_msg" class="msg"></div>
-  </div>
-
-  <!-- ═══ ADMIN LOGIN ═══ -->
-  <div id="adminLogin" class="card hidden">
-    <label>School Code</label>
-    <input id="a_schoolCode" placeholder="e.g. STMARYS">
-    <label>Admin Key</label>
-    <input id="a_key" type="password">
-    <button class="primary" onclick="adminLogin()">Log In</button>
-    <div id="a_err" class="err"></div>
-    <button class="ghost" onclick="backToRoles()">Back</button>
-  </div>
-
-  <!-- ═══ ADMIN DASHBOARD ═══ -->
-  <div id="adminDash" class="card hidden">
-    <div class="top-row">
-      <div class="school-name">Admin Dashboard</div>
-      <button class="ghost" style="width:auto;padding:8px 12px;" onclick="location.reload()">Logout</button>
-    </div>
-    <div class="tabs">
-      <div class="tab active" onclick="showAdminTab('release')">Release</div>
-      <div class="tab" onclick="showAdminTab('add')">Add People</div>
-      <div class="tab" onclick="showAdminTab('pay')">Payments</div>
-      <div class="tab" onclick="showAdminTab('audit')">Audit Log</div>
-    </div>
-
-    <div id="adminTab_release">
-      <label>Faculty / Option</label>
-      <input id="rel_group1" placeholder="e.g. Engineering or Option Scientifique">
-      <label>Department (leave as General for high school)</label>
-      <input id="rel_group2" placeholder="e.g. Metallurgy or General">
-      <label>Class</label>
-      <input id="rel_class" placeholder="e.g. 2nd Year or Grade 10A">
-      <label>Subject</label>
-      <input id="rel_subject" placeholder="e.g. Fluid Mechanics">
-      <label>Term</label>
-      <select id="rel_term"><option>Term1</option><option>Term2</option><option>Term3</option></select>
-      <div class="toggle-row">
-        <span>Release marks to students</span>
-        <div class="switch" id="rel_switch" onclick="toggleReleaseSwitch()"></div>
-      </div>
-      <button class="primary" onclick="submitRelease()">Apply</button>
-      <div id="rel_msg" class="msg"></div>
-    </div>
-
-    <div id="adminTab_add" class="hidden">
-      <p style="font-weight:600;">Add Student</p>
-      <label>Access Code</label><input id="add_s_code" placeholder="e.g. AR-XXXXXXX">
-      <label>Surname</label><input id="add_s_surname">
-      <label>Full Name</label><input id="add_s_name">
-      <label>Class</label><input id="add_s_class">
-      <label>Faculty/Option</label><input id="add_s_g1" value="General">
-      <label>Department</label><input id="add_s_g2" value="General">
-      <label>Subjects (comma-separated)</label><input id="add_s_subjects" placeholder="Math,English,Physics">
-      <button class="primary" onclick="addStudent()">Add Student</button>
-      <div id="add_s_msg" class="msg"></div>
-
-      <p style="font-weight:600;margin-top:20px;">Add Teacher</p>
-      <label>Full Name</label><input id="add_t_name">
-      <label>Surname</label><input id="add_t_surname">
-      <label>Email (code sent here)</label><input id="add_t_email" type="email">
-      <label>Subject Scope</label><input id="add_t_subject" placeholder="e.g. Math — Grade 10A">
-      <button class="primary" onclick="addTeacher()">Add Teacher &amp; Email Code</button>
-      <div id="add_t_msg" class="msg"></div>
-    </div>
-
-    <div id="adminTab_pay" class="hidden">
-      <label>Student Code</label><input id="pay_code">
-      <label>Amount</label><input id="pay_amount" type="number">
-      <label>Status</label>
-      <select id="pay_status"><option value="paid">Paid</option><option value="pending">Pending</option><option value="overdue">Overdue</option></select>
-      <button class="primary" onclick="recordPayment()">Record Payment</button>
-      <div id="pay_msg" class="msg"></div>
-    </div>
-
-    <div id="adminTab_audit" class="hidden">
-      <div id="auditList"><p class="subtitle">Loading...</p></div>
+    <div id="a_msg" class="msg"></div>
+    <div class="tabbar">
+      <div class="tab active" id="tab-structure" onclick="showAdminSection('structure')">Structure</div>
+      <div class="tab" id="tab-profs" onclick="showAdminSection('profs')">Profs (PIN reset)</div>
     </div>
   </div>
+
+  <div id="section-structure" class="card">
+    <label>Faculties (click to open)</label>
+    <div class="tabbar" id="facultyTabs"></div>
+    <label>Departments</label>
+    <div class="tabbar" id="deptTabs"></div>
+    <label>Grades</label>
+    <div class="tabbar" id="gradeTabs"></div>
+
+    <label style="margin-top:14px;">Subjects for this grade (10 slots)</label>
+    <div class="subject-cols" id="subjectRow"></div>
+
+    <label style="margin-top:14px;">Students (50 slots) — click a row's "Marks" button to view that student's subject marks &amp; payment</label>
+    <div style="overflow-x:auto;">
+      <table id="studentTable"></table>
+    </div>
+  </div>
+
+  <div id="section-profs" class="card hidden">
+    <p class="small-note">Assign each prof to one Faculty → Department → Grade → Subject. Resetting a PIN here immediately changes what they use to log in.</p>
+    <div style="overflow-x:auto;">
+      <table id="profsTable"></table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STUDENT MARKS MODAL (admin view) ═══ -->
+<div id="marksModalBg" class="modal-bg hidden">
+  <div class="modal">
+    <div class="top-row"><b id="mm_title"></b><button class="ghost small" onclick="closeMarksModal()">Close</button></div>
+    <div id="mm_body"></div>
+  </div>
+</div>
 
 </div>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────────────────
-// Dedicated AcademyReports Worker — confirmed live and connected to
-// its own KV namespace (CODES_KV -> ACADEMYREPORTS_DATA).
 const WORKER_URL = 'https://academyreports.kasongokimba.workers.dev';
-const ADMIN_KEY = ''; // filled in at login time, never hardcoded
+let structure = null;
+let session = {};
+let cur = {facultyIdx:0, deptIdx:0, gradeIdx:0};
 
-let session = { role:null, schoolCode:null, code:null, surname:null, adminKey:null, teacherScope:[] };
-
-function backToRoles(){
-  document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
-  document.getElementById('roleScreen').classList.remove('hidden');
+function show(id){
+  document.querySelectorAll('.card, #adminConsole, #roleScreen').forEach(el=>el.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
 }
-function showLogin(role){
-  document.getElementById('roleScreen').classList.add('hidden');
-  document.getElementById(role+'Login').classList.remove('hidden');
-}
-
 async function callWorker(action, data){
-  const res = await fetch(WORKER_URL, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ action, ...data })
-  });
+  const res = await fetch(WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action, ...data})});
   return res.json();
 }
-
-// ── STUDENT ──────────────────────────────────────────────────────
-async function studentLogin(){
-  const schoolCode = document.getElementById('s_schoolCode').value.trim();
-  const code = document.getElementById('s_code').value.trim();
-  const surname = document.getElementById('s_surname').value.trim();
-  document.getElementById('s_err').textContent = '';
-
-  const r = await callWorker('ar-student-login', {schoolCode, code, surname});
-  if(r.error){ document.getElementById('s_err').textContent = r.message || 'Invalid code or surname'; return; }
-
-  session = {...session, role:'student', schoolCode, code, surname};
-  document.getElementById('studentLogin').classList.add('hidden');
-  document.getElementById('studentMarks').classList.remove('hidden');
-  document.getElementById('stu_name').textContent = r.student.name;
-  document.getElementById('stu_class').textContent = r.student.class;
-  loadMarks();
+function genCode(){
+  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s='ST-';
+  for(let i=0;i<6;i++) s+=c[Math.floor(Math.random()*c.length)];
+  return s;
 }
 
-async function loadMarks(){
-  const r = await callWorker('ar-get-marks', {schoolCode:session.schoolCode, code:session.code, surname:session.surname, term:'Term1'});
-  const container = document.getElementById('marksContainer');
-  if(r.error){ container.innerHTML = '<p class="err">Could not load marks.</p>'; return; }
+/* ══════════════ MAIN ADMIN ══════════════ */
+async function adminLogin(){
+  const schoolCode = document.getElementById('a_school').value.trim();
+  const adminKey = document.getElementById('a_key').value;
+  const r = await callWorker('ar-admin-get-structure', {schoolCode, adminKey});
+  if(r.error){ document.getElementById('a_err').textContent = r.error; return; }
+  session = {role:'admin', schoolCode, adminKey};
+  structure = r.structure;
+  document.getElementById('a_schoolLabel').textContent = schoolCode;
+  show('adminConsole');
+  renderFacultyTabs();
+  renderDeptTabs();
+  renderGradeTabs();
+  renderSubjectsAndStudents();
+  renderProfsTable();
+}
+async function adminSave(){
+  const r = await callWorker('ar-admin-save-structure', {schoolCode:session.schoolCode, adminKey:session.adminKey, structure});
+  document.getElementById('a_msg').textContent = r.success ? '✓ Saved '+new Date(r.savedAt).toLocaleTimeString() : (r.error||'Error saving');
+}
+function showAdminSection(name){
+  document.getElementById('section-structure').classList.toggle('hidden', name!=='structure');
+  document.getElementById('section-profs').classList.toggle('hidden', name!=='profs');
+  document.getElementById('tab-structure').classList.toggle('active', name==='structure');
+  document.getElementById('tab-profs').classList.toggle('active', name==='profs');
+}
 
-  if(!r.results.length){ container.innerHTML = '<p class="locked">No subjects on file yet.</p>'; return; }
+function renderFacultyTabs(){
+  const el = document.getElementById('facultyTabs'); el.innerHTML='';
+  structure.faculties.forEach((f,i)=>{
+    const t = document.createElement('div');
+    t.className = 'tab'+(i===cur.facultyIdx?' active':'');
+    const inp = document.createElement('input');
+    inp.value = f.name; inp.style.cssText='border:none;background:transparent;width:110px;font-weight:600;color:inherit;';
+    inp.onclick = e=>e.stopPropagation();
+    inp.oninput = ()=>{ f.name = inp.value; };
+    t.onclick = ()=>{ cur.facultyIdx=i; cur.deptIdx=0; cur.gradeIdx=0; renderFacultyTabs(); renderDeptTabs(); renderGradeTabs(); renderSubjectsAndStudents(); };
+    t.appendChild(inp); el.appendChild(t);
+  });
+}
+function renderDeptTabs(){
+  const el = document.getElementById('deptTabs'); el.innerHTML='';
+  structure.faculties[cur.facultyIdx].departments.forEach((d,i)=>{
+    const t = document.createElement('div');
+    t.className = 'tab'+(i===cur.deptIdx?' active':'');
+    const inp = document.createElement('input');
+    inp.value = d.name; inp.style.cssText='border:none;background:transparent;width:110px;font-weight:600;color:inherit;';
+    inp.onclick = e=>e.stopPropagation();
+    inp.oninput = ()=>{ d.name = inp.value; };
+    t.onclick = ()=>{ cur.deptIdx=i; cur.gradeIdx=0; renderDeptTabs(); renderGradeTabs(); renderSubjectsAndStudents(); };
+    t.appendChild(inp); el.appendChild(t);
+  });
+}
+function renderGradeTabs(){
+  const el = document.getElementById('gradeTabs'); el.innerHTML='';
+  structure.faculties[cur.facultyIdx].departments[cur.deptIdx].grades.forEach((g,i)=>{
+    const t = document.createElement('div');
+    t.className = 'tab'+(i===cur.gradeIdx?' active':'');
+    const inp = document.createElement('input');
+    inp.value = g.name; inp.style.cssText='border:none;background:transparent;width:90px;font-weight:600;color:inherit;';
+    inp.onclick = e=>e.stopPropagation();
+    inp.oninput = ()=>{ g.name = inp.value; };
+    t.onclick = ()=>{ cur.gradeIdx=i; renderGradeTabs(); renderSubjectsAndStudents(); };
+    t.appendChild(inp); el.appendChild(t);
+  });
+}
+function curGrade(){ return structure.faculties[cur.facultyIdx].departments[cur.deptIdx].grades[cur.gradeIdx]; }
 
-  let html = '<table><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>CA3</th><th>Mid</th><th>Final</th><th>Total</th><th>Teacher</th></tr>';
-  let anyLocked = false;
-  r.results.forEach(row=>{
-    if(!row.released){ anyLocked = true; return; }
-    const m = row.marks || {};
-    html += `<tr><td>${row.subject}</td><td>${m.ca1??'-'}</td><td>${m.ca2??'-'}</td><td>${m.ca3??'-'}</td><td>${m.midterm??'-'}</td><td>${m.final??'-'}</td><td><b>${m.total??'-'}</b></td><td>${m.teacherName??'-'}</td></tr>`;
+function renderSubjectsAndStudents(){
+  const grade = curGrade();
+  const subEl = document.getElementById('subjectRow'); subEl.innerHTML='';
+  grade.subjects.forEach((s,i)=>{
+    const inp = document.createElement('input');
+    inp.value = s; inp.placeholder = 'Subject '+(i+1);
+    inp.oninput = ()=>{ grade.subjects[i] = inp.value; };
+    subEl.appendChild(inp);
+  });
+
+  const tbl = document.getElementById('studentTable');
+  tbl.innerHTML = '<tr><th>#</th><th>Name</th><th>Code</th><th>Release marks</th><th></th></tr>';
+  grade.students.forEach((st,i)=>{
+    const tr = document.createElement('tr');
+    const nameInp = `<input value="${st.name.replace(/"/g,'&quot;')}" onchange="curGrade().students[${i}].name=this.value">`;
+    const codeInp = `<input value="${st.code}" onchange="curGrade().students[${i}].code=this.value.toUpperCase()">`;
+    const genBtn = `<button class="ghost small" onclick="curGrade().students[${i}].code=genCode(); renderSubjectsAndStudents();">Generate</button>`;
+    const sw = `<div class="switch${st.released?' on':''}" onclick="curGrade().students[${i}].released=!curGrade().students[${i}].released; renderSubjectsAndStudents();"></div>`;
+    const marksBtn = `<button class="ghost small" onclick="openMarksModal(${i})">Marks</button>`;
+    tr.innerHTML = `<td>${i+1}</td><td>${nameInp}</td><td>${codeInp} ${genBtn}</td><td>${sw}</td><td>${marksBtn}</td>`;
+    tbl.appendChild(tr);
+  });
+}
+
+function openMarksModal(studentIdx){
+  const grade = curGrade();
+  const student = grade.students[studentIdx];
+  document.getElementById('mm_title').textContent = (student.name||'(unnamed)') + ' — ' + student.code;
+  const body = document.getElementById('mm_body');
+  let html = '';
+  grade.subjects.forEach((subj,i)=>{
+    if(!subj) return;
+    const m = student.marks[i];
+    const marksHtml = (m && m.m) ? m.m.map(v=>`<span class="readonly-mark">${v??'-'}</span>`).join('') : '<span class="small-note">No marks yet</span>';
+    const meta = m && m.updatedAt ? `<div class="small-note">Last edited by ${m.teacher||'?'} · ${new Date(m.updatedAt).toLocaleString()}</div>` : '';
+    html += `<div class="subject-row"><b>${subj}</b><div class="subject-cols" style="margin:6px 0;">${marksHtml}</div>${meta}</div>`;
+  });
+  html += `<div style="margin-top:14px;"><label>Payment amount</label>
+    <div style="display:flex;gap:8px;">
+      <input id="mm_amount" type="number" value="${student.payment.amount}" style="flex:2;">
+      <select id="mm_currency" style="flex:1;">
+        <option ${student.payment.currency==='USD'?'selected':''}>USD</option>
+        <option ${student.payment.currency==='ZAR'?'selected':''}>ZAR</option>
+        <option ${student.payment.currency==='CDF'?'selected':''}>CDF</option>
+      </select>
+    </div>
+    <button class="primary small" style="margin-top:8px;" onclick="savePayment(${studentIdx})">Save Payment</button>
+    <span id="mm_paysaved" class="msg"></span>
+  </div>`;
+  body.innerHTML = html;
+  document.getElementById('marksModalBg').classList.remove('hidden');
+}
+function savePayment(studentIdx){
+  const student = curGrade().students[studentIdx];
+  student.payment.amount = parseFloat(document.getElementById('mm_amount').value)||0;
+  student.payment.currency = document.getElementById('mm_currency').value;
+  document.getElementById('mm_paysaved').textContent = '✓ set (click "Save All Changes" to persist)';
+}
+function closeMarksModal(){ document.getElementById('marksModalBg').classList.add('hidden'); }
+
+function renderProfsTable(){
+  const tbl = document.getElementById('profsTable');
+  tbl.innerHTML = '<tr><th>#</th><th>Name</th><th>PIN</th><th>Faculty</th><th>Department</th><th>Grade</th><th>Subject</th></tr>';
+  structure.profs.forEach((p,i)=>{
+    const facOpts = structure.faculties.map((f,fi)=>`<option value="${fi}" ${p.facultyIdx===fi?'selected':''}>${f.name}</option>`).join('');
+    const deptOpts = structure.faculties[p.facultyIdx].departments.map((d,di)=>`<option value="${di}" ${p.deptIdx===di?'selected':''}>${d.name}</option>`).join('');
+    const gradeOpts = structure.faculties[p.facultyIdx].departments[p.deptIdx].grades.map((g,gi)=>`<option value="${gi}" ${p.gradeIdx===gi?'selected':''}>${g.name}</option>`).join('');
+    const subjOpts = structure.faculties[p.facultyIdx].departments[p.deptIdx].grades[p.gradeIdx].subjects.map((s,si)=>`<option value="${si}" ${p.subjectIdx===si?'selected':''}>${s||'(Subject '+(si+1)+')'}</option>`).join('');
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td><input value="${p.name.replace(/"/g,'&quot;')}" onchange="structure.profs[${i}].name=this.value"></td>
+      <td><input value="${p.pin}" onchange="structure.profs[${i}].pin=this.value"></td>
+      <td><select onchange="structure.profs[${i}].facultyIdx=+this.value; structure.profs[${i}].deptIdx=0; structure.profs[${i}].gradeIdx=0; renderProfsTable();">${facOpts}</select></td>
+      <td><select onchange="structure.profs[${i}].deptIdx=+this.value; structure.profs[${i}].gradeIdx=0; renderProfsTable();">${deptOpts}</select></td>
+      <td><select onchange="structure.profs[${i}].gradeIdx=+this.value; renderProfsTable();">${gradeOpts}</select></td>
+      <td><select onchange="structure.profs[${i}].subjectIdx=+this.value;">${subjOpts}</select></td>`;
+    tbl.appendChild(tr);
+  });
+}
+
+/* ══════════════ PROFS ══════════════ */
+async function profLogin(){
+  const schoolCode = document.getElementById('p_school').value.trim();
+  const name = document.getElementById('p_name').value.trim();
+  const pin = document.getElementById('p_pin').value.trim();
+  const r = await callWorker('ar-prof-login', {schoolCode, name, pin});
+  if(r.error){ document.getElementById('p_err').textContent = r.error; return; }
+  session = {role:'prof', schoolCode, name, pin, assignment:r.assignment};
+  document.getElementById('p_title').textContent = name;
+  document.getElementById('p_sub').textContent = `${r.assignment.facultyName} → ${r.assignment.deptName} → ${r.assignment.gradeName} → ${r.assignment.subjectName}`;
+  const tbl = document.getElementById('p_table');
+  tbl.innerHTML = '<tr><th>Name</th><th>Code</th>'+[1,2,3,4,5,6,7,8].map(n=>`<th>M${n}</th>`).join('')+'</tr>';
+  r.students.forEach((s,i)=>{
+    const cells = (s.marks||[null,null,null,null,null,null,null,null]).map((v,mi)=>
+      `<td><input type="number" value="${v??''}" data-i="${i}" data-m="${mi}" style="width:48px;"></td>`).join('');
+    tbl.innerHTML += `<tr><td>${s.name||'(unnamed)'}</td><td>${s.code}</td>${cells}</tr>`;
+  });
+  session.students = r.students;
+  show('profConsole');
+}
+async function profSaveMarks(){
+  const rows = document.querySelectorAll('#p_table tr');
+  const updates = [];
+  session.students.forEach((s,i)=>{
+    if(!s.code) return;
+    const marks = [];
+    for(let m=0;m<8;m++){
+      const input = document.querySelector(`#p_table input[data-i="${i}"][data-m="${m}"]`);
+      marks.push(input && input.value !== '' ? parseFloat(input.value) : null);
+    }
+    updates.push({code:s.code, marks});
+  });
+  const r = await callWorker('ar-prof-save-marks', {
+    schoolCode:session.schoolCode, name:session.name, pin:session.pin, updates
+  });
+  document.getElementById('p_msg').textContent = r.success ? `✓ Saved ${r.updated} students` : (r.error||'Error');
+}
+
+/* ══════════════ STUDENT ══════════════ */
+async function studentLogin(){
+  const schoolCode = document.getElementById('s_school').value.trim();
+  const surname = document.getElementById('s_surname').value.trim();
+  const code = document.getElementById('s_code').value.trim();
+  const r = await callWorker('ar-student-login', {schoolCode, surname, code});
+  if(r.error){ document.getElementById('s_err').textContent = r.error; return; }
+  show('studentResult');
+  document.getElementById('s_name').textContent = r.studentName;
+  document.getElementById('s_meta').textContent = `${r.faculty} · ${r.department} · ${r.grade}`;
+  const body = document.getElementById('s_body');
+  if(!r.released){ body.innerHTML = '<p class="small-note">Marks have not been released yet by the school admin.</p>'; return; }
+  let html = '<table><tr><th>Subject</th>'+[1,2,3,4,5,6,7,8].map(n=>`<th>M${n}</th>`).join('')+'<th>Updated</th></tr>';
+  r.subjects.forEach(s=>{
+    const marks = (s.marks||[]).map(v=>`<td>${v??'-'}</td>`).join('');
+    html += `<tr><td>${s.subject}</td>${marks}<td class="small-note">${s.updatedAt?new Date(s.updatedAt).toLocaleDateString():'-'}</td></tr>`;
   });
   html += '</table>';
-  if(anyLocked) html += '<p class="locked">Some subjects are not yet released by your school admin.</p>';
-  container.innerHTML = html;
-}
-
-// ── TEACHER ──────────────────────────────────────────────────────
-async function teacherLogin(){
-  const schoolCode = document.getElementById('t_schoolCode').value.trim();
-  const code = document.getElementById('t_code').value.trim();
-  const surname = document.getElementById('t_surname').value.trim();
-  document.getElementById('t_err').textContent = '';
-
-  const r = await callWorker('ar-teacher-login', {schoolCode, code, surname});
-  if(r.error){ document.getElementById('t_err').textContent = 'Invalid code or surname'; return; }
-
-  session = {...session, role:'teacher', schoolCode, code, surname, teacherScope:r.teacher.scope||[]};
-  document.getElementById('teacherLogin').classList.add('hidden');
-  document.getElementById('teacherEntry').classList.remove('hidden');
-  document.getElementById('tea_name').textContent = r.teacher.name;
-
-  const sel = document.getElementById('tea_scopeSelect');
-  sel.innerHTML = session.teacherScope.map((s,i)=>`<option value="${i}">${s.subject} — ${s.className||''}</option>`).join('') || '<option>No subjects assigned</option>';
-}
-
-async function saveMark(){
-  const idx = document.getElementById('tea_scopeSelect').value;
-  const scope = session.teacherScope[idx];
-  if(!scope){ document.getElementById('tea_msg').textContent = 'No subject scope selected'; return; }
-
-  const r = await callWorker('ar-teacher-save-mark', {
-    schoolCode: session.schoolCode,
-    teacherCode: session.code,
-    studentCode: document.getElementById('tea_studentCode').value.trim().toUpperCase(),
-    subject: scope.subject,
-    term: document.getElementById('tea_term').value,
-    scores: {
-      ca1: document.getElementById('tea_ca1').value,
-      ca2: document.getElementById('tea_ca2').value,
-      ca3: document.getElementById('tea_ca3').value,
-      midterm: document.getElementById('tea_mid').value,
-      final: document.getElementById('tea_final').value
-    }
-  });
-  document.getElementById('tea_msg').textContent = r.success ? '✓ Mark saved' : (r.error||'Error saving mark');
-}
-
-// ── ADMIN ────────────────────────────────────────────────────────
-async function adminLogin(){
-  const schoolCode = document.getElementById('a_schoolCode').value.trim();
-  const key = document.getElementById('a_key').value;
-  // Quick check via a harmless toggle read so we don't need a dedicated login action
-  session = {...session, role:'admin', schoolCode, adminKey:key};
-  document.getElementById('adminLogin').classList.add('hidden');
-  document.getElementById('adminDash').classList.remove('hidden');
-  loadAudit();
-}
-
-let releaseOn = false;
-function toggleReleaseSwitch(){
-  releaseOn = !releaseOn;
-  document.getElementById('rel_switch').classList.toggle('on', releaseOn);
-}
-async function submitRelease(){
-  const r = await callWorker('ar-admin-toggle-release', {
-    schoolCode: session.schoolCode, adminKey: session.adminKey,
-    group1: document.getElementById('rel_group1').value || 'General',
-    group2: document.getElementById('rel_group2').value || 'General',
-    className: document.getElementById('rel_class').value,
-    subject: document.getElementById('rel_subject').value,
-    term: document.getElementById('rel_term').value,
-    released: releaseOn
-  });
-  document.getElementById('rel_msg').textContent = r.success ? '✓ Updated' : (r.error||'Error');
-}
-
-function showAdminTab(tab){
-  ['release','add','pay','audit'].forEach(t=>{
-    document.getElementById('adminTab_'+t).classList.toggle('hidden', t!==tab);
-  });
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  event.target.classList.add('active');
-  if(tab==='audit') loadAudit();
-}
-
-async function addStudent(){
-  const r = await callWorker('ar-admin-add-student', {
-    schoolCode: session.schoolCode, adminKey: session.adminKey,
-    code: document.getElementById('add_s_code').value,
-    surname: document.getElementById('add_s_surname').value,
-    name: document.getElementById('add_s_name').value,
-    className: document.getElementById('add_s_class').value,
-    group1: document.getElementById('add_s_g1').value,
-    group2: document.getElementById('add_s_g2').value,
-    subjects: document.getElementById('add_s_subjects').value.split(',').map(s=>s.trim()).filter(Boolean)
-  });
-  document.getElementById('add_s_msg').textContent = r.success ? '✓ Student added' : (r.error||'Error');
-}
-
-async function addTeacher(){
-  const r = await callWorker('ar-admin-add-teacher', {
-    schoolCode: session.schoolCode, adminKey: session.adminKey,
-    name: document.getElementById('add_t_name').value,
-    surname: document.getElementById('add_t_surname').value,
-    email: document.getElementById('add_t_email').value,
-    scope: [{subject: document.getElementById('add_t_subject').value}]
-  });
-  document.getElementById('add_t_msg').textContent = r.success ? '✓ Teacher added — code emailed' : (r.error||'Error');
-}
-
-async function recordPayment(){
-  const r = await callWorker('ar-admin-record-payment', {
-    schoolCode: session.schoolCode, adminKey: session.adminKey,
-    studentCode: document.getElementById('pay_code').value,
-    amount: document.getElementById('pay_amount').value,
-    status: document.getElementById('pay_status').value
-  });
-  document.getElementById('pay_msg').textContent = r.success ? '✓ Payment recorded' : (r.error||'Error');
-}
-
-async function loadAudit(){
-  const r = await callWorker('ar-admin-get-audit-log', {schoolCode: session.schoolCode, adminKey: session.adminKey});
-  const el = document.getElementById('auditList');
-  if(!r.success){ el.innerHTML = '<p class="err">Could not load log</p>'; return; }
-  if(!r.entries.length){ el.innerHTML = '<p class="subtitle">No activity yet.</p>'; return; }
-  el.innerHTML = r.entries.map(e=>`<div class="audit-item"><b>${e.teacherName||'—'}</b> edited <b>${e.subject}</b> for ${e.studentCode} · ${new Date(e.ts).toLocaleString()}</div>`).join('');
+  html += `<p style="margin-top:10px;">Payment: <b>${r.payment.amount} ${r.payment.currency}</b></p>`;
+  body.innerHTML = html;
 }
 </script>
 </body>
