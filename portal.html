@@ -207,8 +207,9 @@
 
 <script>
 // ── CONFIG ─────────────────────────────────────────────────────────
-// Same Worker as Smart Academy AI — just new action names.
-const WORKER_URL = 'https://smartacademy-ai.kasongokimba.workers.dev';
+// Dedicated AcademyReports Worker — confirmed live and connected to
+// its own KV namespace (CODES_KV -> ACADEMYREPORTS_DATA).
+const WORKER_URL = 'https://academyreports.kasongokimba.workers.dev';
 const ADMIN_KEY = ''; // filled in at login time, never hardcoded
 
 let session = { role:null, schoolCode:null, code:null, surname:null, adminKey:null, teacherScope:[] };
