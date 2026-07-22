@@ -219,7 +219,7 @@ function renderFacultyTabs(){
     const t = document.createElement('div'); t.className='tab'+(i===cur.facultyIdx?' active':'');
     const inp = document.createElement('input'); inp.value=f.name;
     inp.style.cssText='border:none;background:transparent;width:110px;font-weight:700;color:inherit;padding:0;';
-    inp.onclick=e=>e.stopPropagation(); inp.oninput=()=>{f.name=inp.value;};
+    inp.oninput=()=>{f.name=inp.value;};
     t.onclick=()=>{cur.facultyIdx=i;cur.deptIdx=0;cur.gradeIdx=0;renderFacultyTabs();renderDeptTabs();renderGradeTabs();renderSubjectsAndStudents();};
     t.appendChild(inp); el.appendChild(t);
   });
@@ -230,7 +230,7 @@ function renderDeptTabs(){
     const t = document.createElement('div'); t.className='tab'+(i===cur.deptIdx?' active':'');
     const inp = document.createElement('input'); inp.value=d.name;
     inp.style.cssText='border:none;background:transparent;width:110px;font-weight:700;color:inherit;padding:0;';
-    inp.onclick=e=>e.stopPropagation(); inp.oninput=()=>{d.name=inp.value;};
+    inp.oninput=()=>{d.name=inp.value;};
     t.onclick=()=>{cur.deptIdx=i;cur.gradeIdx=0;renderDeptTabs();renderGradeTabs();renderSubjectsAndStudents();};
     t.appendChild(inp); el.appendChild(t);
   });
@@ -241,7 +241,7 @@ function renderGradeTabs(){
     const t = document.createElement('div'); t.className='tab'+(i===cur.gradeIdx?' active':'');
     const inp = document.createElement('input'); inp.value=g.name;
     inp.style.cssText='border:none;background:transparent;width:90px;font-weight:700;color:inherit;padding:0;';
-    inp.onclick=e=>e.stopPropagation(); inp.oninput=()=>{g.name=inp.value;};
+    inp.oninput=()=>{g.name=inp.value;};
     t.onclick=()=>{cur.gradeIdx=i;renderGradeTabs();renderSubjectsAndStudents();};
     t.appendChild(inp); el.appendChild(t);
   });
