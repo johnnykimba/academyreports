@@ -388,9 +388,9 @@ function openProfConsole(idx){
   document.getElementById('p_title').textContent = a.subjectName;
   document.getElementById('p_sub').textContent = `${a.facultyName} → ${a.deptName} → ${a.gradeName}`;
   const tbl = document.getElementById('p_table');
-  tbl.innerHTML = '<tr><th>Name</th>'+[1,2,3,4,5,6,7,8].map(n=>`<th>M${n}</th>`).join('')+'</tr>';
+  tbl.innerHTML = '<tr><th>Name</th>'+Array.from({length:15},(_,n)=>`<th>M${n+1}</th>`).join('')+'</tr>';
   a.students.forEach((s,i)=>{
-    const cells = (s.marks||[null,null,null,null,null,null,null,null]).map((v,mi)=>
+    const cells = (s.marks||Array(15).fill(null)).map((v,mi)=>
       `<td><input type="number" class="mark-input" value="${v??''}" data-i="${i}" data-m="${mi}"></td>`).join('');
     tbl.innerHTML += `<tr><td>${s.name||'(unnamed)'}</td>${cells}</tr>`;
   });
@@ -402,7 +402,7 @@ async function profSaveMarks(){
   a.students.forEach((s,i)=>{
     if(!s.code) return;
     const marks = [];
-    for(let m=0;m<8;m++){
+    for(let m=0;m<15;m++){
       const input = document.querySelector(`#p_table input[data-i="${i}"][data-m="${m}"]`);
       marks.push(input && input.value !== '' ? parseFloat(input.value) : null);
     }
@@ -427,7 +427,7 @@ async function studentLogin(){
   document.getElementById('s_meta').textContent = `${r.faculty} · ${r.department} · ${r.grade}`;
   const body = document.getElementById('s_body');
   if(!r.released){ body.innerHTML = '<p class="note">Marks have not been released yet by the school admin.</p>'; return; }
-  let html = '<table><tr><th>Subject</th><th>Prof</th>'+[1,2,3,4,5,6,7,8].map(n=>`<th>M${n}</th>`).join('')+'<th>Updated</th></tr>';
+  let html = '<table><tr><th>Subject</th><th>Prof</th>'+Array.from({length:15},(_,n)=>`<th>M${n+1}</th>`).join('')+'<th>Updated</th></tr>';
   r.subjects.forEach(s=>{
     const marks = (s.marks||[]).map(v=>`<td>${v??'-'}</td>`).join('');
     html += `<tr><td>${s.subject}</td><td class="note">${s.prof||'—'}</td>${marks}<td class="note">${s.updatedAt?new Date(s.updatedAt).toLocaleDateString():'-'}</td></tr>`;
