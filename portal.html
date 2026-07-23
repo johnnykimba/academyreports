@@ -133,7 +133,7 @@
 <div id="adminConsole" class="hidden">
   <div class="topbar">
     <span class="logo">Academy<span>Reports</span> · Main Admin</span>
-    <div><button class="btn btn-amber" onclick="adminSave()">Save All Changes</button> <button class="logout" onclick="location.reload()">Logout</button></div>
+    <div><button class="btn btn-ghost" onclick="adminRefresh()">🔄 Refresh from server</button> <button class="btn btn-amber" onclick="adminSave()">Save All Changes</button> <button class="logout" onclick="location.reload()">Logout</button></div>
   </div>
   <div class="wrap">
     <div id="unsavedBanner" class="unsaved-banner hidden">⚠ You have unsaved changes — click "Save All Changes" above or Profs/Students won't see them yet.</div>
@@ -151,7 +151,8 @@
       <label>Grades</label>
       <div class="tabbar" id="gradeTabs"></div>
 
-      <label style="margin-top:16px;">Subjects &amp; assigned prof (10 slots)</label>
+      <label style="margin-top:16px;">Subjects &amp; assigned prof (15 slots)</label>
+      <div id="breadcrumb" style="color:#06b6d4;font-weight:800;font-size:.95rem;margin-bottom:8px;"></div>
       <table id="subjectTable"></table>
 
       <label style="margin-top:16px;">Students (50 slots) — click "Marks" to view/verify + set payment</label>
@@ -210,6 +211,16 @@ async function adminSave(){
   document.getElementById('a_msg').textContent = r.success ? '✓ Saved '+new Date(r.savedAt).toLocaleTimeString() : (r.error||'Error saving');
   if(r.success) document.getElementById('unsavedBanner').classList.add('hidden');
 }
+async function adminRefresh(){
+  const hasUnsaved = !document.getElementById('unsavedBanner').classList.contains('hidden');
+  if(hasUnsaved && !confirm('You have unsaved changes here that will be lost. Refresh anyway to pull the latest marks from profs?')) return;
+  const r = await callWorker('ar-admin-get-structure', {adminKey:session.adminKey});
+  if(r.error){ document.getElementById('a_msg').textContent = r.error; return; }
+  structure = r.structure;
+  document.getElementById('unsavedBanner').classList.add('hidden');
+  document.getElementById('a_msg').textContent = '✓ Refreshed — showing latest from server';
+  renderFacultyTabs(); renderDeptTabs(); renderGradeTabs(); renderSubjectsAndStudents(); renderProfsTable();
+}
 function showAdminSection(name){
   document.getElementById('section-admin').classList.toggle('hidden', name!=='admin');
   document.getElementById('section-profs').classList.toggle('hidden', name!=='profs');
@@ -254,6 +265,10 @@ function renderGradeTabs(){
 
 function renderSubjectsAndStudents(){
   const grade = curGrade();
+  const fac = structure.faculties[cur.facultyIdx];
+  const dept = fac.departments[cur.deptIdx];
+  document.getElementById('breadcrumb').textContent = `${fac.name} → ${dept.name} → ${grade.name}`;
+
   const subTbl = document.getElementById('subjectTable');
   subTbl.innerHTML = '<tr><th>#</th><th>Subject</th><th>Prof name</th></tr>';
   grade.subjects.forEach((s,i)=>{
@@ -354,11 +369,11 @@ function openProfConsole(idx){
   document.getElementById('p_title').textContent = a.subjectName;
   document.getElementById('p_sub').textContent = `${a.facultyName} → ${a.deptName} → ${a.gradeName}`;
   const tbl = document.getElementById('p_table');
-  tbl.innerHTML = '<tr><th>Name</th><th>Code</th>'+[1,2,3,4,5,6,7,8].map(n=>`<th>M${n}</th>`).join('')+'</tr>';
+  tbl.innerHTML = '<tr><th>Name</th>'+[1,2,3,4,5,6,7,8].map(n=>`<th>M${n}</th>`).join('')+'</tr>';
   a.students.forEach((s,i)=>{
     const cells = (s.marks||[null,null,null,null,null,null,null,null]).map((v,mi)=>
       `<td><input type="number" class="mark-input" value="${v??''}" data-i="${i}" data-m="${mi}"></td>`).join('');
-    tbl.innerHTML += `<tr><td>${s.name||'(unnamed)'}</td><td class="mono">${s.code}</td>${cells}</tr>`;
+    tbl.innerHTML += `<tr><td>${s.name||'(unnamed)'}</td>${cells}</tr>`;
   });
   show('profConsole');
 }
