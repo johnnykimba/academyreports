@@ -234,10 +234,19 @@ async function adminLogin(){
   show('adminConsole');
   renderFacultyTabs(); renderDeptTabs(); renderGradeTabs(); renderSubjectsAndStudents(); renderProfsTable();
 }
+function backfillMissingCodes(){
+  structure.faculties.forEach(fac=>fac.departments.forEach(dept=>dept.grades.forEach(grade=>{
+    grade.students.forEach(st=>{
+      if(st.name && st.name.trim() && !st.code) st.code = genCode();
+    });
+  })));
+}
 async function adminSave(){
+  backfillMissingCodes();
   const r = await callWorker('ar-admin-save-structure', {adminKey:session.adminKey, structure});
   document.getElementById('a_msg').textContent = r.success ? '✓ Saved '+new Date(r.savedAt).toLocaleTimeString() : (r.error||'Error saving');
   if(r.success) document.getElementById('unsavedBanner').classList.add('hidden');
+  renderSubjectsAndStudents();
 }
 async function adminRefresh(){
   const hasUnsaved = !document.getElementById('unsavedBanner').classList.contains('hidden');
@@ -326,7 +335,7 @@ function renderSubjectsAndStudents(){
   grade.students.forEach((st,i)=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${i+1}</td>
-      <td><input value="${(st.name||'').replace(/"/g,'&quot;')}" onchange="curGrade().students[${i}].name=this.value; markDirty();"></td>
+      <td><input value="${(st.name||'').replace(/"/g,'&quot;')}" onchange="curGrade().students[${i}].name=this.value; if(!curGrade().students[${i}].code){curGrade().students[${i}].code=genCode();} markDirty(); renderSubjectsAndStudents();"></td>
       <td><input class="mono" value="${st.code}" onchange="curGrade().students[${i}].code=this.value.toUpperCase(); markDirty();">
           <button class="btn btn-ghost" onclick="curGrade().students[${i}].code=genCode(); renderSubjectsAndStudents(); markDirty();">Generate</button></td>
       <td><div class="switch${st.released?' on':''}" onclick="curGrade().students[${i}].released=!curGrade().students[${i}].released; renderSubjectsAndStudents(); markDirty();"></div></td>
