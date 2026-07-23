@@ -51,6 +51,14 @@
   .unsaved-banner{background:rgba(245,158,11,.15);border:1px solid #f59e0b;color:#f59e0b;padding:10px 14px;border-radius:8px;font-weight:700;font-size:.82rem;margin-bottom:12px;}
   .assign-card{background:rgba(255,255,255,.05);border:1px solid rgba(6,182,212,.25);border-radius:10px;padding:12px 16px;margin-bottom:10px;cursor:pointer;}
   .assign-card:hover{border-color:#06b6d4;}
+  @media print{
+    .no-print{display:none !important;}
+    body{background:#fff;color:#000;}
+    .card{background:#fff;color:#000;border:1px solid #ccc;}
+    th{background:#eee;color:#000;}
+    td,th{border:1px solid #999;}
+    .note{color:#555;}
+  }
 </style>
 </head>
 <body>
@@ -85,9 +93,10 @@
 </div>
 <div id="studentResult" class="wrap hidden">
   <div class="card">
-    <div class="top-row"><b id="s_name" style="font-size:1.2rem;"></b><button class="logout" onclick="location.reload()">Logout</button></div>
+    <div class="top-row no-print"><b id="s_name" style="font-size:1.2rem;"></b><button class="logout" onclick="location.reload()">Logout</button></div>
     <div id="s_meta" class="note"></div>
     <div id="s_body" style="margin-top:14px;"></div>
+    <button class="btn btn-amber no-print" style="margin-top:14px;" onclick="window.print()">📥 Download / Print Report</button>
   </div>
 </div>
 
@@ -156,6 +165,7 @@
       <table id="subjectTable"></table>
 
       <label style="margin-top:16px;">Students (50 slots) — click "Marks" to view/verify + set payment</label>
+      <button class="btn btn-ghost" onclick="sortStudentsAlpha()">🔤 Sort A–Z</button>
       <div style="overflow-x:auto;"><table id="studentTable"></table></div>
     </div>
 
@@ -248,6 +258,19 @@ function showAdminSection(name){
 }
 function curGrade(){ return structure.faculties[cur.facultyIdx].departments[cur.deptIdx].grades[cur.gradeIdx]; }
 
+function sortStudentsAlpha(){
+  const grade = curGrade();
+  grade.students.sort((a,b)=>{
+    const an = (a.name||'').trim(); const bn = (b.name||'').trim();
+    if(!an && !bn) return 0;
+    if(!an) return 1;
+    if(!bn) return -1;
+    return an.localeCompare(bn, undefined, {sensitivity:'base'});
+  });
+  markDirty();
+  renderSubjectsAndStudents();
+}
+
 function renderFacultyTabs(){
   const el = document.getElementById('facultyTabs'); el.innerHTML='';
   structure.faculties.forEach((f,i)=>{
@@ -317,14 +340,19 @@ function openMarksModal(studentIdx){
   const student = grade.students[studentIdx];
   document.getElementById('mm_title').textContent = (student.name||'(unnamed)') + ' — ' + student.code;
   const body = document.getElementById('mm_body');
-  let html = '';
+
+  let rows = '';
   grade.subjects.forEach((subj,i)=>{
     if(!subj.name) return;
     const m = student.marks[i];
-    const marksHtml = (m && m.m) ? m.m.map(v=>`<span class="readonly-mark">${v??'-'}</span>`).join('') : '<span class="note">No marks yet</span>';
-    const meta = m && m.updatedAt ? `<div class="note">Last edited by ${m.teacher||'?'} · ${new Date(m.updatedAt).toLocaleString()}</div>` : '';
-    html += `<div class="subject-row"><b>${subj.name}</b> <span class="note">(${subj.prof||'no prof set'})</span><div style="margin:6px 0;">${marksHtml}</div>${meta}</div>`;
+    const marksArr = (m && m.m) ? m.m : Array(15).fill(null);
+    const marksCells = marksArr.map(v=>`<td>${v??'-'}</td>`).join('');
+    const updated = m && m.updatedAt ? new Date(m.updatedAt).toLocaleString() : '-';
+    rows += `<tr><td>${subj.name}</td><td class="note">${subj.prof||'—'}</td>${marksCells}<td class="note">${updated}</td></tr>`;
   });
+
+  let html = `<div style="overflow-x:auto;"><table><tr><th>Subject</th><th>Prof</th>${Array.from({length:15},(_,n)=>`<th>M${n+1}</th>`).join('')}<th>Updated</th></tr>${rows}</table></div>`;
+
   html += `<div style="margin-top:16px;"><label>Payment amount</label>
     <div style="display:flex;gap:8px;">
       <input id="mm_amount" type="number" value="${student.payment.amount}" style="flex:2;">
