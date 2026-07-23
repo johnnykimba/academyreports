@@ -181,6 +181,23 @@ let session = {};
 let cur = {facultyIdx:0, deptIdx:0, gradeIdx:0};
 function markDirty(){ document.getElementById('unsavedBanner').classList.remove('hidden'); }
 
+function syncProfsFromSubjects(){
+  const seen = new Set(); const names = [];
+  structure.faculties.forEach(fac=>fac.departments.forEach(dept=>dept.grades.forEach(grade=>{
+    grade.subjects.forEach(subj=>{
+      const n = (subj.prof||'').trim();
+      if(!n) return;
+      const key = n.toLowerCase();
+      if(!seen.has(key)){ seen.add(key); names.push(n); }
+    });
+  })));
+  const old = structure.profs || [];
+  structure.profs = names.map(name=>{
+    const existing = old.find(p => (p.name||'').trim().toLowerCase() === name.toLowerCase());
+    return { name, pin: existing ? existing.pin : '' };
+  });
+}
+
 function show(id){
   ['roleScreen','mainAdminChoice','studentLogin','studentResult','profLogin','profAssignPicker','profConsole','adminLogin','adminConsole'].forEach(i=>{
     document.getElementById(i).classList.toggle('hidden', i!==id);
@@ -203,6 +220,7 @@ async function adminLogin(){
   if(r.error){ document.getElementById('a_err').textContent = r.error; return; }
   session = {role:'admin', adminKey};
   structure = r.structure;
+  syncProfsFromSubjects();
   show('adminConsole');
   renderFacultyTabs(); renderDeptTabs(); renderGradeTabs(); renderSubjectsAndStudents(); renderProfsTable();
 }
@@ -217,6 +235,7 @@ async function adminRefresh(){
   const r = await callWorker('ar-admin-get-structure', {adminKey:session.adminKey});
   if(r.error){ document.getElementById('a_msg').textContent = r.error; return; }
   structure = r.structure;
+  syncProfsFromSubjects();
   document.getElementById('unsavedBanner').classList.add('hidden');
   document.getElementById('a_msg').textContent = '✓ Refreshed — showing latest from server';
   renderFacultyTabs(); renderDeptTabs(); renderGradeTabs(); renderSubjectsAndStudents(); renderProfsTable();
@@ -275,7 +294,7 @@ function renderSubjectsAndStudents(){
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${i+1}</td>
       <td><input value="${(s.name||'').replace(/"/g,'&quot;')}" placeholder="Subject ${i+1}" onchange="curGrade().subjects[${i}].name=this.value; markDirty();"></td>
-      <td><input value="${(s.prof||'').replace(/"/g,'&quot;')}" placeholder="e.g. Mrs Kalonji" onchange="curGrade().subjects[${i}].prof=this.value; markDirty();"></td>`;
+      <td><input value="${(s.prof||'').replace(/"/g,'&quot;')}" placeholder="e.g. Mrs Kalonji" onchange="curGrade().subjects[${i}].prof=this.value; markDirty(); syncProfsFromSubjects(); renderProfsTable();"></td>`;
     subTbl.appendChild(tr);
   });
 
